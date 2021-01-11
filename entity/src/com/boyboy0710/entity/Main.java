@@ -32,7 +32,7 @@ public class Main extends JavaPlugin implements Listener{
 
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if(cmd.getName().equalsIgnoreCase("spawn king_zombie")) {
+		if(cmd.getName().equalsIgnoreCase("spawn_king_zombie")) {
 		    Player player = (Player) sender;
 		    setZombieStats((LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE));
 		   }
