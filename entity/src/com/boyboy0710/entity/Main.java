@@ -1,6 +1,7 @@
 package com.boyboy0710.entity;
 
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -14,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
 
 public class Main extends JavaPlugin implements Listener{
 
@@ -35,6 +37,9 @@ public class Main extends JavaPlugin implements Listener{
 		if(cmd.getName().equalsIgnoreCase("spawn_king_zombie")) {
 		    Player player = (Player) sender;
 		    setZombieStats((LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE));
+		    World world = player.getWorld();
+		    world.setStorm(true);
+			world.setThundering(true);
 		   }
 		
 		if(cmd.getName().equalsIgnoreCase("p")) {
@@ -71,7 +76,9 @@ public class Main extends JavaPlugin implements Listener{
 	   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_BOOTS, 100));
 	   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_SWORD, 100));
 	   ((Entity) event).getWorld().createExplosion(((Entity) event).getLocation(), 10);
-	   
+	   World world = ((Entity) event).getWorld();
+	    world.setStorm(true);
+		world.setThundering(true);
 	  }
-	 }
+	}
 }
