@@ -31,15 +31,16 @@ public class Main extends JavaPlugin implements Listener{
 	public void onDisable() {
 		System.out.println("entity 플러그인이 비활성화 되었습니다");
 	}
-
+	
+	public boolean zombie = false;
+	public boolean skeleton = false;
+	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if(cmd.getName().equalsIgnoreCase("spawn_king_zombie")) {
 		    Player player = (Player) sender;
 		    setZombieStats((LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE));
-		    World world = player.getWorld();
-		    world.setStorm(true);
-			world.setThundering(true);
+		    zombie = true;
 		   }
 		
 		if(cmd.getName().equalsIgnoreCase("p")) {
@@ -59,7 +60,7 @@ public class Main extends JavaPlugin implements Listener{
 	  entity.setHealth(1000.0);//현재 체력 설정
 	  entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,1000000, 10));
 	  entity.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,1000000, 10));
-	  entity.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,1000000, 100));
+	  entity.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,1000000, 300));
 	  entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,1000000, 1));
 	  entity.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 	  entity.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
@@ -67,6 +68,22 @@ public class Main extends JavaPlugin implements Listener{
 	  entity.getEquipment().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
 	  entity.getEquipment().setItemInHand(new ItemStack(Material.NETHERITE_SWORD));
 	 }
+	 
+	 public void setSkeletonStats(LivingEntity entity) {
+		  entity.setCustomName("king_skeleton");
+		  entity.setMaxHealth(1000.0);//최대 체력 설정
+		  entity.setHealth(1000.0);//현재 체력 설정
+		  entity.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,1000000, 10));
+		  entity.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,1000000, 10));
+		  entity.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,1000000, 100));
+		  entity.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING,1000000, 1));
+		  entity.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
+		  entity.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+		  entity.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
+		  entity.getEquipment().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+		  entity.getEquipment().setItemInHand(new ItemStack(Material.BOW));
+		 }
+	 
 	 @EventHandler
 	 public void getZombieDead(EntityDeathEvent event) {
 	  if(event.getEntity().getCustomName() == "king_zombie") {
@@ -76,9 +93,16 @@ public class Main extends JavaPlugin implements Listener{
 	   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_BOOTS, 100));
 	   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_SWORD, 100));
 	   ((Entity) event).getWorld().createExplosion(((Entity) event).getLocation(), 10);
-	   World world = ((Entity) event).getWorld();
-	    world.setStorm(true);
-		world.setThundering(true);
+	   zombie = false;
+	   if(!zombie) {
+		   if(!skeleton) {
+			   World world = ((Entity) event).getWorld();
+			   world.setStorm(true);
+			   world.setThundering(true);
+		   }
+	   }
 	  }
 	}
+	 
+	
 }
