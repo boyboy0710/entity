@@ -37,20 +37,29 @@ public class Main extends JavaPlugin implements Listener{
 	
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
-		if(cmd.getName().equalsIgnoreCase("spawn_king_zombie")) {
-		    Player player = (Player) sender;
+		if(cmd.getName().equalsIgnoreCase("spawn")) {
+			if(args.length == 0) {
+				sender.sendMessage("커맨드를 끝까지 쳐주세요");
+			} 
+			
+			else if(args[0].equalsIgnoreCase("king_zombie")) {
+			Player player = (Player) sender;
 		    setZombieStats((LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE));
 		    zombie = true;
-		   }
+		    World world = player.getWorld();
+			   world.setStorm(true);
+			   world.setThundering(true);
+			}
 		
-		if(cmd.getName().equalsIgnoreCase("p")) {
-			Player p = (Player) sender;
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,1000000, 10));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,1000000, 10));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST,1000000, 200));
-			p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 1000000, 1));
+			else if(args[0].equalsIgnoreCase("king_skeleton")) {
+				Player player = (Player) sender;
+				setZombieStats((LivingEntity) player.getWorld().spawnEntity(player.getLocation(), EntityType.SKELETON));
+				skeleton = true;
+				World world = player.getWorld();
+				world.setStorm(true);
+				world.setThundering(true);
+			}
 		}
-		
 		return false;
 	}
 	
@@ -97,12 +106,28 @@ public class Main extends JavaPlugin implements Listener{
 	   if(!zombie) {
 		   if(!skeleton) {
 			   World world = ((Entity) event).getWorld();
-			   world.setStorm(true);
-			   world.setThundering(true);
+			   world.setStorm(false);
+			   world.setThundering(false);
 		   }
 	   }
-	  }
-	}
+	 }
+	  if(event.getEntity().getCustomName() == "king_skeleton") {
+		   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_BLOCK, 100));
+		   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_HELMET, 100));
+		   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_LEGGINGS, 100));
+		   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_BOOTS, 100));
+		   event.getEntity().getWorld().dropItem(event.getEntity().getLocation(),new ItemStack(Material.NETHERITE_SWORD, 100));
+		   ((Entity) event).getWorld().createExplosion(((Entity) event).getLocation(), 10);
+		   zombie = false;
+		   if(!zombie) {
+			   if(!skeleton) {
+				   World world = ((Entity) event).getWorld();
+				   world.setStorm(false);
+				   world.setThundering(false);
+			   }
+		   }
+		 }
+}
 	 
 	
 }
